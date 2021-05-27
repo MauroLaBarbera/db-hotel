@@ -29,7 +29,7 @@ WHERE `prenotazioni`.`created_at` BETWEEN '2018-05-01' AND '2018-05-31'
 4. Fai la somma di tutti i prezzi delle prenotazioni per le stanze del
 primo piano
 
-SELECT SUM(`pagamenti.price`) AS `tot`
+SELECT SUM(`pagamenti.price`) AS `tot` , `stanze`.`floor`
 FROM `prenotazioni`
 INNER JOIN `pagamenti`
 ON `prenotazioni`.`id` = `pagamenti`.`prenotazione_id`
@@ -39,8 +39,18 @@ WHERE `stanze`.`floor` = '1'
 
 5. Prendi i dati di fatturazione per la prenotazione con id=7
 
-
+SELECT `prenotazioni_has_ospiti`.`prenotazione_id` , `ospiti`.`name` , `ospiti`.`lastname` , `ospiti`.`date_of_birth` , `ospiti`.`document_type` , `ospiti`.`document_number`
+FROM `ospiti`
+INNER JOIN `prenotazioni_has_ospiti`
+ON `ospiti`.`id` = `prenotazioni_has_ospiti`.`ospite_id`
+WHERE `prenotazioni_has_ospiti`.`prenotazione_id` = '7'
 
 
 6. Le stanze sono state tutte prenotate almeno una volta?
 (Visualizzare le stanze non ancora prenotate)
+
+SELECT *
+FROM `stanze`
+LEFT JOIN `prenotazioni`
+ON `stanze`.`id` = `prenotazioni`.`stanza_id`
+WHERE `prenotazioni`.`stanza_id` IS NULL
